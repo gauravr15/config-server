@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: config-server
+
+  profiles:
+    active: jdbc
+
+  ## GIT
+  cloud:
+    config:
+      server:
+
+## JDBC
+        jdbc:
+          order: 1
+          sql: SELECT `KEY`, `VALUE` FROM PROPERTIES WHERE APPLICATION=? AND PROFILE=? AND LABEL=? AND IS_ACTIVE=1
+
+server:
+  servlet:
+    context-path: /config-server
+           
+eureka:
+  client:
+    service-url:
+      #defaultZone: http://eureka-server-container:8761/eureka/
+      defaultZone: ${EUREKA_SERVER_URL}
