@@ -1,20 +1,24 @@
-# Use an official OpenJDK runtime as a parent image
-FROM openjdk:8-jdk-alpine
-
-# Set the working directory inside the container
+FROM openjdk:17-jdk
 WORKDIR /app
+COPY config-server-0.0.1-SNAPSHOT.jar .
 
-# Copy the JAR file (assuming your Spring Boot JAR is named as "config-server.jar")
-COPY target/config-server-0.0.1-SNAPSHOT.jar .
-
-# Expose the port your Spring Boot application listens on (default is 8080)
 EXPOSE 8008
 
-# Define environment variables for connecting to the MySQL database
-ENV EUREKA_SERVER_URL=http://eureka-server-container:8761/eureka/
-ENV SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/middleware
-ENV SPRING_DATASOURCE_USERNAME=root
-ENV SPRING_DATASOURCE_PASSWORD=root
+# Spring profiles
+ENV SPRING_PROFILES_ACTIVE=jdbc,production
 
-# Run the Spring Boot application when the container starts
-CMD ["java", "-jar", "config-server-0.0.1-SNAPSHOT.jar"]
+# Disable Eureka registration/fetch
+ENV EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
+ENV EUREKA_CLIENT_FETCH_REGISTRY=false
+
+# Datasource
+ENV SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb-db:3306/middleware
+ENV SPRING_DATASOURCE_USERNAME=root
+ENV SPRING_DATASOURCE_PASSWORD=BR-10h8352
+
+# Disable all metrics to avoid cgroup crash
+ENV MANAGEMENT_METRICS_ENABLE_ALL=false
+ENV MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,info
+
+# JVM options for low-memory
+CMD ["java","-Xms128m","-Xmx256m","-Dspring.main.allow-bean-definition-overriding=true","-jar","config-server-0.0.1-SNAPSHOT.jar"]
