@@ -1,7 +1,7 @@
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
-# Copy the JAR built by Jenkins
+# Copy built JAR from Jenkins workspace
 COPY target/config-server-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8008
