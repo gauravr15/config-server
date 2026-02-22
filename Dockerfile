@@ -1,10 +1,10 @@
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
-# Copy the pre-fetched artifact
-COPY config-server-0.0.1-SNAPSHOT.jar .
+# Copy the JAR built by Jenkins
+COPY target/config-server-0.0.1-SNAPSHOT.jar .
 
-EXPOSE 8880
+EXPOSE 8008
 
 # Spring profiles
 ENV SPRING_PROFILES_ACTIVE=jdbc,production
