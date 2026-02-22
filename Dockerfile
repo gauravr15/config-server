@@ -2,8 +2,8 @@ FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
-# Copy built JAR from submodule build
-COPY config-server/target/config-server-0.0.1-SNAPSHOT.jar app.jar
+# Copy built JAR from root target directory
+COPY target/config-server-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8008
 
