@@ -1,15 +1,8 @@
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
-# Pull versioned artifact from an artifact repository (only if not present locally)
-ARG CONFIG_SERVER_JAR_URL=https://artifactory.example.com/repo/config-server-0.0.1-SNAPSHOT.jar
-RUN if [ ! -f config-server-0.0.1-SNAPSHOT.jar ]; then \
-        curl -fSL $CONFIG_SERVER_JAR_URL -o config-server-0.0.1-SNAPSHOT.jar; \
-    fi
-
-# Optional: run container as non-root user (enterprise best practice)
-RUN useradd -m jenkins && chown -R jenkins:jenkins /app
-USER jenkins
+# Copy the pre-fetched artifact
+COPY config-server-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8880
 
